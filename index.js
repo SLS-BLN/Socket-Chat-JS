@@ -1,6 +1,10 @@
-const app = require("express")();
-const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const express = require("express");
+const http = require("http");
+
+const app = express();
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 const port = process.env.PORT || 3000;
 
@@ -14,6 +18,8 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(port, () => {
+app.use(express.static(__dirname + "/public"));
+
+server.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
 });
